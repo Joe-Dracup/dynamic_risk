@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import type { FormKitSchemaNode } from "@formkit/core";
+import { ref } from "vue";
 
-const risk = ref<any>({ title: "test" });
+const risk = ref<any>({});
 
 const schema: FormKitSchemaNode[] = [
   {
@@ -14,6 +15,9 @@ const schema: FormKitSchemaNode[] = [
     label: "Title",
     help: "what is your title",
     validation: "required",
+    attrs: {
+      parseType: "string",
+    },
   },
   {
     $formkit: "text",
@@ -21,6 +25,9 @@ const schema: FormKitSchemaNode[] = [
     label: "First Name",
     help: "what is your firstname",
     validation: "required",
+    attrs: {
+      parseType: "string",
+    },
   },
   {
     $formkit: "text",
@@ -28,6 +35,9 @@ const schema: FormKitSchemaNode[] = [
     label: "Last Name",
     help: "what is your lastname",
     validation: "required",
+    attrs: {
+      parseType: "string",
+    },
   },
   {
     $formkit: "text",
@@ -35,6 +45,9 @@ const schema: FormKitSchemaNode[] = [
     label: "Fave Colour",
     help: "what is your colour",
     validation: "required",
+    attrs: {
+      parseType: "string",
+    },
   },
   {
     $formkit: "text",
@@ -42,23 +55,48 @@ const schema: FormKitSchemaNode[] = [
     label: "Dans Question",
     help: "what is your dan",
     validation: "required",
+    attrs: {
+      parseType: "string",
+    },
   },
 ];
 
 async function save(savedRisk: any) {
+  // Transform savedRisk to the desired structure
+  const transformedRisk = Object.keys(savedRisk).reduce((acc, key) => {
+    // Find the schema node that matches the key
+    const schemaNode = schema.find(
+      (node) => node.$formkit === "text" && node.name === key
+    );
+
+    // If the schema node is found, use its parseType
+    if (schemaNode && schemaNode.attrs?.parseType) {
+      acc[key] = {
+        Value: savedRisk[key],
+        parseType: schemaNode.attrs.parseType,
+      };
+    } else {
+      // Default case if parseType is not found
+      acc[key] = {
+        Value: savedRisk[key],
+        parseType: "string",
+      };
+    }
+    return acc;
+  }, {} as any);
+
   const post = await useFetch(`/api/quote/create`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json'
+      "Content-Type": "application/json",
     },
     body: {
-      risk: savedRisk
-    }
-  })
+      risk: transformedRisk,
+    },
+  });
 
-  risk.value = post.data.value.risk
+  risk.value = post.data.value.risk;
 }
-
 </script>
 
 <template>

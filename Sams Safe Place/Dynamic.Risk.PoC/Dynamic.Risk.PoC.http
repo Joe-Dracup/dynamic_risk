@@ -1,0 +1,6 @@
+@Dynamic.Risk.PoC_HostAddress = http://localhost:5016
+
+GET {{Dynamic.Risk.PoC_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
