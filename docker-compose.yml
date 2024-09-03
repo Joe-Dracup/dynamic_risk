@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: dynamic_risk
+      POSTGRES_PASSWORD: this_is_not_a_real_password
+      PGDATA: /data/dynamic_risk
+    volumes:
+      - postgres-db:/data/dynamic_risk
+    ports:
+      - '5432:5432'
+      
+volumes:
+  postgres-db:
+    driver: local
