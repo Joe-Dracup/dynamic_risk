@@ -1,5 +1,6 @@
 using Dynamic.Risk.Domain;
 using Dynamic.Risk.PoC.Services;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.Text;
 using System.Text.Json;
@@ -30,9 +31,9 @@ namespace Dynamic.Risk.PoC.Controllers
                 Request.Body.Position = 0;
                 var riskDictionary = JsonSerializer.Deserialize<Dictionary<string, RiskEntry>>(body, _deserializationOptions);
 
-                _riskEnrichmentService.Enrich(riskDictionary);
+                var response = _riskEnrichmentService.Enrich(riskDictionary);
                 
-                return Content("Cheers!");
+                return Ok(response);
             }
         }
     }

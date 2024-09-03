@@ -2,7 +2,8 @@
 import type { FormKitSchemaNode } from "@formkit/core";
 import { ref } from "vue";
 
-const risk = ref<any>({});
+const risk = ref<any>();
+const cheapestPremium = ref<string>();
 
 const schema: FormKitSchemaNode[] = [
   {
@@ -16,7 +17,7 @@ const schema: FormKitSchemaNode[] = [
     help: "what is your title",
     validation: "required",
     attrs: {
-      parseType: "string",
+      parseType: "definedListDetail",
     },
   },
   {
@@ -95,7 +96,8 @@ async function save(savedRisk: any) {
     },
   });
 
-  risk.value = post.data.value.risk;
+  risk.value = savedRisk;
+  cheapestPremium.value = post.data.value;
 }
 </script>
 
@@ -112,6 +114,7 @@ async function save(savedRisk: any) {
     >
       <FormKitSchema :schema="schema" />
     </FormKit>
+    <p>{{ cheapestPremium }}</p>
     <pre wrap>{{ risk }}</pre>
   </div>
 </template>
