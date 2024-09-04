@@ -17,10 +17,10 @@ export default defineEventHandler(async (event) => {
     QuoteInParallel: false,
     EffectiveDate: new Date(),
     RiskReference: insertedRisk.id,
-    RiskFields: enrich(insertedRisk.risk),
+    RiskFields: await enrich(insertedRisk.risk),
   };
 
-  const cheapestPremium = getRate(ratingObject);
+  const cheapestPremium = await getRate(ratingObject);
 
   return cheapestPremium;
 });

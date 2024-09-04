@@ -7,9 +7,9 @@ namespace Dynamic.Risk.PoC.Services
     {
         private EnricherFactory _enricherFactory = new EnricherFactory();
 
-        public Dictionary<string, RiskEntry> Enrich(Dictionary<string, RiskEntry> riskDictionary)
+        public Dictionary<string, string> Enrich(Dictionary<string, RiskEntry> riskDictionary)
         {
-            var newDict = new Dictionary<string, RiskEntry>();
+            var newDict = new Dictionary<string, string>();
 
             foreach(var entry in riskDictionary)
             {
@@ -19,7 +19,7 @@ namespace Dynamic.Risk.PoC.Services
 
                 foreach(var result in enrichmentResult)
                 {
-                    newDict.Add(result.Item1, result.Item2);
+                    newDict.Add(result.Item1, result.Item2.Value);
                 }
             }
 
